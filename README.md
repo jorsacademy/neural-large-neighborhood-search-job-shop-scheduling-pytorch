@@ -72,6 +72,26 @@ The declared neighborhood repair is exact: every unique permutation of the selec
 
 This exactness applies only to the selected finite block, not to the full JSSP.
 
+## GitHub Actions validation
+
+A GitHub-hosted Ubuntu runner validated the complete implementation on Python 3.12.14 with PyTorch 2.13.0+cpu and NumPy 2.5.2. The remote regression suite passed all **5/5 tests**.
+
+The CI smoke configuration used 3 jobs × 3 machines, block length 4, 8 training instances, 8 scorer epochs, 4 held-out test instances and 3 LNS iterations. Runner-observed result:
+
+```text
+training examples=48
+final training MSE=0.009862
+positive-label-rate=0.354
+
+method               mean Cmax    mean improvement
+Initial MWKR            30.000         0.00%
+Learned LNS             26.500         8.11%
+Random LNS              27.250         7.97%
+Oracle-block LNS        26.500         9.60%
+```
+
+The learned scorer beat random block selection slightly on this small runner-specific smoke fixture. Oracle-block LNS remained information-advantaged and achieved the larger mean percentage improvement. These CI numbers validate the end-to-end learned-neighborhood pipeline; they are not a general learned-search superiority claim.
+
 ## Tests
 
 The suite checks:
